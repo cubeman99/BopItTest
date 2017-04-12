@@ -2,24 +2,6 @@
 #include <gtest/gtest.h>
 
 
-TEST(Language, todo)
-{
-	EXPECT_TRUE(true);
-	EXPECT_EQ(1, 1);
-	EXPECT_NE(0, 1);
-	EXPECT_GT(5, 3);
-	EXPECT_FLOAT_EQ(3.14f, 3.14f);
-}
-
-TEST(Language, todo)
-{
-	EXPECT_TRUE(true);
-	EXPECT_EQ(1, 1);
-	EXPECT_NE(0, 1);
-	EXPECT_GT(5, 3);
-	EXPECT_FLOAT_EQ(3.14f, 3.14f);
-}
-
 /*
 the idea i behind these test
 class languageConverter{
@@ -51,7 +33,7 @@ TEST(Language, checkValid)
 	EXPECT_EQ(false, lg.checkValidChoice("monkey"));
 }
 
-TEST(Language, test _PigLatin)
+TEST(Language, test_PigLatin)
 {
 	lg = langugaeConvert();
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
