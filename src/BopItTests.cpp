@@ -22,20 +22,35 @@ enum BopItAction
 };
 
 
-// Class to manage a game of Bop-It
+// Class to manage a game of Bop-It.
 class BopIt
 {
 public:
 	BopIt() {}
 
-	// Getters
-	int getScore() { return -1; }
-	BopItAction getCurrentAction() { return ACTION_PULL; }
+	// Returns true if th game is currently being played.
 	bool isPlaying() { return false; }
 
-	// User interaction
+	// Get the current game's score
+	// Returns the last game's score if not currently playing.
+	int getScore() { return -1; }
+	
+	// Get the prompted action that the user needs to perform.
+	// Returns ACTION_NONE if the game isn't currently being played.
+	BopItAction getCurrentAction() { return ACTION_PULL; }
+
+	// Get length of time in seconds by which the user needs
+	// to respond with an action to keep playing.
+	float getRespondTime() { return -1.0f; };
+
+	// Start a new game if a game is not currently being played.
 	void startGame() {}
+
+	// End the current game immediately if one is currently being played.
 	void endGame() {}
+
+	// Perform an action on the bop-it.
+	// Returns true if the game is still playing, or false if a game over.
 	bool performAction(BopItAction action) { return false; }
 };
 
@@ -54,10 +69,20 @@ TEST(BopIt, constructor)
 TEST(BopIt, startGame)
 {
 	BopIt bopit;
+
+	// Start the game and check the initial game state.
 	bopit.startGame();
 	EXPECT_TRUE(bopit.isPlaying());
 	EXPECT_NE(ACTION_NONE, bopit.getCurrentAction());
 	EXPECT_EQ(0, bopit.getScore());
+	EXPECT_GT(0.0f, bopit.getRespondTime());
+
+	// Calling startGame while playing a game shouldn't do anything.
+	bopit.startGame();
+	EXPECT_TRUE(bopit.isPlaying());
+	EXPECT_NE(ACTION_NONE, bopit.getCurrentAction());
+	EXPECT_EQ(0, bopit.getScore());
+	EXPECT_GT(0.0f, bopit.getRespondTime());
 }
 
 // End a bop-it game and expect its state to change accordingly
@@ -75,6 +100,12 @@ TEST(BopIt, endGame)
 	EXPECT_EQ(3, bopit.getScore());
 	
 	// End the game, expect the score to remain.
+	bopit.endGame();
+	EXPECT_FALSE(bopit.isPlaying());
+	EXPECT_EQ(ACTION_NONE, bopit.getCurrentAction());
+	EXPECT_EQ(3, bopit.getScore());
+	
+	// Ending the game twice shouldn't change anything.
 	bopit.endGame();
 	EXPECT_FALSE(bopit.isPlaying());
 	EXPECT_EQ(ACTION_NONE, bopit.getCurrentAction());
@@ -127,6 +158,26 @@ TEST(BopIt, performAction_incorrect)
 	BopItAction incorrectAction = (BopItAction)
 		(((int) bopit.getCurrentAction() + 1) % NUM_ACTIONS);
 	EXPECT_FALSE(bopit.performAction(incorrectAction));
+	EXPECT_FALSE(bopit.isPlaying());
+}
+
+// Test the performAction function by waiting too long that it
+// will cause a game over
+TEST(BopIt, performAction_timeout)
+{
+	BopIt bopit;
+	bopit.startGame();
+
+	// Perform the action at 50% of the duration.
+	// This means we perform the action before the response time expires.
+	sleep_for(milliseconds((int) (bopit.getRespondTime() * 500.0f)));
+	EXPECT_TRUE(bopit.performAction(bopit.getCurrentAction()));
+	EXPECT_TRUE(bopit.isPlaying());
+	
+	// Perform the action at 150% the duration.
+	// Because we waited past the response time, we should get a game over.
+	sleep_for(milliseconds((int) (bopit.getRespondTime() * 1500.0f)));
+	EXPECT_TRUE(bopit.performAction(bopit.getCurrentAction()));
 	EXPECT_FALSE(bopit.isPlaying());
 }
 
