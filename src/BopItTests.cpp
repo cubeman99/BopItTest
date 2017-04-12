@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 
-TEST(BopIt, asasd)
+TEST(BopIt, todo)
 {
 	EXPECT_TRUE(true);
 }
