@@ -118,10 +118,13 @@
     <ClCompile Include="..\src\Languages.cpp" />
     <ClCompile Include="..\src\LaunguageTests.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\ScoreBoard.cpp" />
+    <ClCompile Include="..\src\ScoreBoardTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BopIt.h" />
     <ClInclude Include="..\src\Languages.h" />
+    <ClInclude Include="..\src\scoreBoard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

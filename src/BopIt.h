@@ -1,6 +1,9 @@
 #ifndef _BOP_IT_H_
 #define _BOP_IT_H_
+
 #include <map>
+
+
 // List of possible actions for a game of Bop-It.
 enum BopItAction
 {

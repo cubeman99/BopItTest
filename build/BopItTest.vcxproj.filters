@@ -36,12 +36,21 @@
     <ClCompile Include="..\src\BopIt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ScoreBoardTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScoreBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BopIt.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Languages.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\scoreBoard.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

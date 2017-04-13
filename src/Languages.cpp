@@ -1,7 +1,7 @@
 #include "Languages.h"
 #include <sstream>
 #include <algorithm> 
-
+#include <iomanip>
 
 static bool isVowel(char c)
 {
@@ -98,7 +98,7 @@ std::string HexTranslater::translate(const std::string& text)
 	for (unsigned int i = 0; i < text.length(); ++i)
 	{
 		unsigned int c = (unsigned int) text[i];
-		translation << std::hex << c;
+		translation << std::setfill('0') << std::setw(2) << std::hex << c;
 	}
 	
 	return translation.str();
