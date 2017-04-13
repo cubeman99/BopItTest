@@ -2,58 +2,10 @@
 #include <gtest/gtest.h>
 #include <chrono>
 #include <thread>
+#include "BopIt.h"
 
 using namespace std::this_thread;
 using namespace std::chrono;
-
-
-// List of possible actions for a game of Bop-It.
-enum BopItAction
-{
-	ACTION_NONE = -1,
-	
-	ACTION_BOP,
-	ACTION_PULL,
-	ACTION_TWIST,
-	ACTION_SPIN,
-	ACTION_FLICK,
-
-	NUM_ACTIONS,
-};
-
-
-// Class to manage a game of Bop-It.
-class BopIt
-{
-public:
-	BopIt() {}
-
-	// Returns true if th game is currently being played.
-	bool isPlaying() { return false; }
-
-	// Get the current game's score
-	// Returns the last game's score if not currently playing.
-	int getScore() { return -1; }
-	
-	// Get the prompted action that the user needs to perform.
-	// Returns ACTION_NONE if the game isn't currently being played.
-	BopItAction getCurrentAction() { return ACTION_PULL; }
-
-	// Get length of time in seconds by which the user needs
-	// to respond with an action to keep playing.
-	float getRespondTime() { return -1.0f; };
-
-	// Start a new game if a game is not currently being played.
-	void startGame() {}
-
-	// End the current game immediately if one is currently being played.
-	void endGame() {}
-
-	// Perform an action on the bop-it.
-	// Returns true if the game is still playing, or false if a game over.
-	bool performAction(BopItAction action) { return false; }
-};
-
 
 
 // Test the initial state of a constructed BopIt object.
@@ -72,14 +24,14 @@ TEST(BopIt, startGame)
 
 	// Start the game and check the initial game state.
 	bopit.startGame();
-	EXPECT_TRUE(bopit.isPlaying());
+	ASSERT_TRUE(bopit.isPlaying());
 	EXPECT_NE(ACTION_NONE, bopit.getCurrentAction());
 	EXPECT_EQ(0, bopit.getScore());
 	EXPECT_GT(0.0f, bopit.getRespondTime());
 
 	// Calling startGame while playing a game shouldn't do anything.
 	bopit.startGame();
-	EXPECT_TRUE(bopit.isPlaying());
+	ASSERT_TRUE(bopit.isPlaying());
 	EXPECT_NE(ACTION_NONE, bopit.getCurrentAction());
 	EXPECT_EQ(0, bopit.getScore());
 	EXPECT_GT(0.0f, bopit.getRespondTime());
@@ -97,17 +49,17 @@ TEST(BopIt, endGame)
 	bopit.performAction(bopit.getCurrentAction());
 	bopit.performAction(bopit.getCurrentAction());
 	bopit.performAction(bopit.getCurrentAction());
-	EXPECT_EQ(3, bopit.getScore());
+	ASSERT_EQ(3, bopit.getScore());
 	
 	// End the game, expect the score to remain.
 	bopit.endGame();
-	EXPECT_FALSE(bopit.isPlaying());
+	ASSERT_FALSE(bopit.isPlaying());
 	EXPECT_EQ(ACTION_NONE, bopit.getCurrentAction());
 	EXPECT_EQ(3, bopit.getScore());
 	
 	// Ending the game twice shouldn't change anything.
 	bopit.endGame();
-	EXPECT_FALSE(bopit.isPlaying());
+	ASSERT_FALSE(bopit.isPlaying());
 	EXPECT_EQ(ACTION_NONE, bopit.getCurrentAction());
 	EXPECT_EQ(3, bopit.getScore());
 }
@@ -135,15 +87,16 @@ TEST(BopIt, performAction_correct)
 {
 	BopIt bopit;
 	bopit.startGame();
-	EXPECT_TRUE(bopit.isPlaying());
+	ASSERT_TRUE(bopit.isPlaying());
+	ASSERT_EQ(0, bopit.getScore());
 
 	// Perform two correct actions.
-	EXPECT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	EXPECT_EQ(1, bopit.getScore());
-	EXPECT_TRUE(bopit.isPlaying());
-	EXPECT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	EXPECT_EQ(2, bopit.getScore());
-	EXPECT_TRUE(bopit.isPlaying());
+	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
+	ASSERT_EQ(1, bopit.getScore());
+	ASSERT_TRUE(bopit.isPlaying());
+	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
+	ASSERT_EQ(2, bopit.getScore());
+	ASSERT_TRUE(bopit.isPlaying());
 }
 
 // Test the performAction function with an action other than the prompted
@@ -152,13 +105,13 @@ TEST(BopIt, performAction_incorrect)
 {
 	BopIt bopit;
 	bopit.startGame();
-	EXPECT_TRUE(bopit.isPlaying());
+	ASSERT_TRUE(bopit.isPlaying());
 
 	// Perform an incorrect action, thus ending the game.
 	BopItAction incorrectAction = (BopItAction)
 		(((int) bopit.getCurrentAction() + 1) % NUM_ACTIONS);
-	EXPECT_FALSE(bopit.performAction(incorrectAction));
-	EXPECT_FALSE(bopit.isPlaying());
+	ASSERT_FALSE(bopit.performAction(incorrectAction));
+	ASSERT_FALSE(bopit.isPlaying());
 }
 
 // Test the performAction function by waiting too long that it
@@ -171,13 +124,13 @@ TEST(BopIt, performAction_timeout)
 	// Perform the action at 50% of the duration.
 	// This means we perform the action before the response time expires.
 	sleep_for(milliseconds((int) (bopit.getRespondTime() * 500.0f)));
-	EXPECT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	EXPECT_TRUE(bopit.isPlaying());
+	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
+	ASSERT_TRUE(bopit.isPlaying());
 	
 	// Perform the action at 150% the duration.
 	// Because we waited past the response time, we should get a game over.
 	sleep_for(milliseconds((int) (bopit.getRespondTime() * 1500.0f)));
-	EXPECT_TRUE(bopit.performAction(bopit.getCurrentAction()));
+	EXPECT_FALSE(bopit.performAction(bopit.getCurrentAction()));
 	EXPECT_FALSE(bopit.isPlaying());
 }
 

@@ -112,9 +112,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\googletest\src\gtest-all.cc" />
+    <ClCompile Include="..\src\BopItSecretTests.cpp" />
     <ClCompile Include="..\src\BopItTests.cpp" />
     <ClCompile Include="..\src\LaunguageTests.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\BopIt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
