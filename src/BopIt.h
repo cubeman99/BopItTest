@@ -1,8 +1,6 @@
 #ifndef _BOP_IT_H_
 #define _BOP_IT_H_
 
-#include <map>
-
 
 // List of possible actions for a game of Bop-It.
 enum BopItAction
@@ -58,7 +56,7 @@ public:
 	// Insulting the bop-it three times will make it so that when you perform 
 	// the current action, it will give you a game over with a resulting score
 	// of zero points.
-	void insult() {}
+	void insult();
 private:
 	BopItAction setRandomBopItAction();
 	void updateCurrentTime();
@@ -68,8 +66,9 @@ private:
 	int score;
 	BopItAction currentAction;
 	float respondTime;
-	int increaseSpeed;
-	std::map<std::string, BopItAction> mapBopItAction;
+	float increaseSpeed;
+	int insultedCounter;
+	bool instultedFlag;
 };
 
 
