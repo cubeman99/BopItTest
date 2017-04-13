@@ -1,7 +1,6 @@
 #ifndef _BOP_IT_H_
 #define _BOP_IT_H_
-
-
+#include <map>
 // List of possible actions for a game of Bop-It.
 enum BopItAction
 {
@@ -16,38 +15,36 @@ enum BopItAction
 	NUM_ACTIONS,
 };
 
-
 // Class to manage a game of Bop-It.
 class BopIt
 {
 public:
-	BopIt() {}
+	BopIt();
 
 	// Returns true if th game is currently being played.
-	bool isPlaying() { return false; }
+	bool isPlaying() { return playing; }
 
 	// Get the current game's score
 	// Returns the last game's score if not currently playing.
-	int getScore() { return -1; }
+	int getScore() { return score; };
 	
 	// Get the prompted action that the user needs to perform.
 	// Returns ACTION_NONE if the game isn't currently being played.
-	BopItAction getCurrentAction() { return ACTION_PULL; }
+	BopItAction getCurrentAction();
 
 	// Get length of time in seconds by which the user needs
 	// to respond with an action to keep playing.
-	float getRespondTime() { return -1.0f; };
+	float getRespondTime() { return respondTime; };
 
 	// Start a new game if a game is not currently being played.
-	void startGame() {}
+	void startGame();
 
 	// End the current game immediately if one is currently being played.
-	void endGame() {}
+	void endGame();
 
 	// Perform an action on the bop-it.
 	// Returns true if the game is still playing, or false if a game over.
-	bool performAction(BopItAction action) { return false; }
-
+	bool performAction(BopItAction action);
 	
 	//-------------------------------------------------------------------------
 	// Special feature
@@ -59,6 +56,17 @@ public:
 	// the current action, it will give you a game over with a resulting score
 	// of zero points.
 	void insult() {}
+private:
+	BopItAction setRandomBopItAction();
+	void updateCurrentTime();
+	time_t startingTime;
+
+	bool playing;
+	int score;
+	BopItAction currentAction;
+	float respondTime;
+	int increaseSpeed;
+	std::map<std::string, BopItAction> mapBopItAction;
 };
 
 
