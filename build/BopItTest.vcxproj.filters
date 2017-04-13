@@ -30,9 +30,15 @@
     <ClCompile Include="..\src\BopItSecretTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Languages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BopIt.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Languages.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

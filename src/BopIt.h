@@ -1,5 +1,5 @@
-#ifndef __BOP_IT_H__
-#define __BOP_IT_H__
+#ifndef _BOP_IT_H_
+#define _BOP_IT_H_
 
 
 // List of possible actions for a game of Bop-It.
@@ -62,4 +62,4 @@ public:
 };
 
 
-#endif // __BOP_IT_H__
+#endif // _BOP_IT_H_

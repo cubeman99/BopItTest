@@ -1,27 +1,6 @@
 
 #include <gtest/gtest.h>
-
-
-/*
-the idea i behind these test
-class languageConverter{
-    public:
-        Bool checkValidChoice(int choice)
-        string convertText(string choice, string word)
-
-    private:
-        string toPigLatin(string word)
-        string toSpanglish(string word)
-        string validLanguageChoices[..,..]
-}
-*/
-
-/*
-other languages Possible Langugaes
-http://www.travelphrases.info/languages/languagegames.htm
-*/
-
-
+#include "Languages.h"
 
 
 /*
@@ -29,13 +8,13 @@ test ifValidAudioChoice
 */
 TEST(Language, checkValid)
 {
-	lg = langugaeConvert();
+	LanguageConverter lg;
 	EXPECT_EQ(false, lg.checkValidChoice("monkey"));
 }
 
 TEST(Language, test_PigLatin)
 {
-	lg = langugaeConvert();
+	LanguageConverter lg;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     / examples of translations
     /   http://www.omniglot.com/language/phrases/piglatin.htm
@@ -46,7 +25,7 @@ TEST(Language, test_PigLatin)
 
 TEST(Language, test_Opish)
 {
-	lg = langugaeConvert();
+	LanguageConverter lg;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     / examples of translations
     /   http://www.urbandictionary.com/define.php?term=opish
@@ -56,7 +35,7 @@ TEST(Language, test_Opish)
 
 TEST(Language, test_Hex)
 {
-	lg = langugaeConvert();
+	LanguageConverter lg;
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     / examples of translations
     /   http://codebeautify.org/string-hex-converter
