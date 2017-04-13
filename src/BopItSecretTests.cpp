@@ -1,91 +1,68 @@
-
-#include <gtest/gtest.h>
-#include <chrono>
-#include <thread>
 #include "BopIt.h"
+#include <stdlib.h>
+#include <iostream>
+#include <ctime>
 
-using namespace std::this_thread;
-using namespace std::chrono;
+BopIt::BopIt() {
+	playing = false;
+	score = 0;
+	currentAction = ACTION_NONE;
+	respondTime = 5.0f;
+	increaseSpeed = 1.2;
 
-
-// Test that insulting the bop-it will not make it not give a
-// point for the current action.
-TEST(BopItSecret, insult_points)
-{
-	BopIt bopit;
-	bopit.startGame();
-	
-	// Insult the bopit. The first action should now not give us a point.
-	bopit.insult();
-	ASSERT_EQ(0, bopit.getScore());
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_EQ(0, bopit.getScore());
-	
-	// Rack up 2 points.
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_EQ(1, bopit.getScore());
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_EQ(2, bopit.getScore());
-
-	// Now insult the bopit again and check that we stay at 2 points.
-	bopit.insult();
-	ASSERT_EQ(2, bopit.getScore());
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_EQ(2, bopit.getScore());
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_EQ(3, bopit.getScore());
+	mapBopItAction["ACTION_BOP"] = ACTION_BOP;
+	mapBopItAction["ACTION_PULL"] = ACTION_PULL;
+	mapBopItAction["ACTION_TWIST"] = ACTION_TWIST;
+	mapBopItAction["ACTION_SPIN"] = ACTION_SPIN;
+	mapBopItAction["ACTION_FLICK"] = ACTION_FLICK;
 }
 
-// Test that insulting the bop-it will make it give you half the
-// time as it says it does to perform your next action.
-TEST(BopItSecret, insult_timeout)
-{
-	BopIt bopit;
-	bopit.startGame();
-	
-	// Insult and perform the next action at 25% of the duration.
-	// This should still be early enough to get a point.
-	bopit.insult();
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	sleep_for(milliseconds((int) (bopit.getRespondTime() * 250.0f)));
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_TRUE(bopit.isPlaying());
-	
-	// Insult again and perform the next action at 75% the duration.
-	// Because the response time is secretly halved, we should get a game
-	// over for waiting too long.
-	bopit.insult();
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	sleep_for(milliseconds((int) (bopit.getRespondTime() * 750.0f)));
-	ASSERT_FALSE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_FALSE(bopit.isPlaying());
+void BopIt::startGame() {
+	playing = true;
+	currentAction = ACTION_TWIST;
+	updateCurrentTime();
 }
 
-// Test that insulting the bop-it three times will result
-// in a game over and a score of zero points.
-TEST(BopItSecret, insult_gameOver)
-{
-	BopIt bopit;
-	bopit.startGame();
+BopItAction BopIt::getCurrentAction() { 
+	if (playing == false) {
+		return ACTION_NONE;
+	}
+	else {
+		return currentAction;
+	}	 
+}
+/*
+i think having a enum of this might be a problem
+*/
+bool BopIt::performAction(BopItAction action) {
+	bool gotRightAnswer = false;
+	if (currentAction == action) {
+		gotRightAnswer = true;
+		updateCurrentTime();
+	}
 
-	// Insult the bopit twice.
-	bopit.insult();
-	ASSERT_TRUE(bopit.isPlaying());
-	bopit.insult();
-	ASSERT_TRUE(bopit.isPlaying());
-	
-	// Rack up some points.
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_TRUE(bopit.performAction(bopit.getCurrentAction()));
+	if(gotRightAnswer){
+		score += 1;
+	}
+	else {
+		endGame();
+	}
 
-	// Insulting the 3rd time should give us a game over after
-	// completing the current action. Score should also turn to zero.
-	bopit.insult();
-	ASSERT_TRUE(bopit.isPlaying());
-	ASSERT_FALSE(bopit.performAction(bopit.getCurrentAction()));
-	ASSERT_FALSE(bopit.isPlaying());
-	ASSERT_EQ(0, bopit.getScore());
+	return gotRightAnswer;
+
+	/*
+	i have to end game if they preforme the wrong action
+	*/
 }
 
+void BopIt::endGame() {
+	playing = false;
+	currentAction = ACTION_NONE;
+}
+
+BopItAction BopIt::setRandomBopItAction() {
+	return (BopItAction)(rand() % NUM_ACTIONS);
+}
+void BopIt::updateCurrentTime() {
+	startingTime = time(0);
+}
