@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\googletest\src\gtest-all.cc" />
+    <ClCompile Include="..\src\BopIt.cpp" />
     <ClCompile Include="..\src\BopItSecretTests.cpp" />
     <ClCompile Include="..\src\BopItTests.cpp" />
     <ClCompile Include="..\src\Languages.cpp" />
