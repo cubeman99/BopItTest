@@ -9,13 +9,9 @@ BopIt::BopIt() {
 	score = 0;
 	currentAction = ACTION_NONE;
 	respondTime = 5.0f;
-	increaseSpeed = 1.2;
-
-	mapBopItAction["ACTION_BOP"] = ACTION_BOP;
-	mapBopItAction["ACTION_PULL"] = ACTION_PULL;
-	mapBopItAction["ACTION_TWIST"] = ACTION_TWIST;
-	mapBopItAction["ACTION_SPIN"] = ACTION_SPIN;
-	mapBopItAction["ACTION_FLICK"] = ACTION_FLICK;
+	increaseSpeed = 0.9f;
+	insultedCounter = 0;
+	instultedFlag = 0;
 }
 
 void BopIt::startGame() {
@@ -37,23 +33,36 @@ i think having a enum of this might be a problem
 */
 bool BopIt::performAction(BopItAction action) {
 	bool gotRightAnswer = false;
-	if (currentAction == action) {
-		gotRightAnswer = true;
-		updateCurrentTime();
+
+	float timeElapsed = float(clock() - startingTime) / CLOCKS_PER_SEC;
+
+	float insultPenalty = respondTime * float(.25 * insultedCounter);
+	if (timeElapsed > (respondTime - insultPenalty)) {
+		endGame();
+		return false;
 	}
 
-	if(gotRightAnswer){
+	if (currentAction == action) {
+		gotRightAnswer = true;
 		score += 1;
+		respondTime *= increaseSpeed;
+		updateCurrentTime();
 	}
 	else {
 		endGame();
 	}
 
+	if (instultedFlag == true) {
+		score -= 1;
+		instultedFlag = false;
+		if (insultedCounter >= 3) {
+			endGame();
+			score = 0;
+			return false;
+		}
+	}
 	return gotRightAnswer;
 
-	/*
-	i have to end game if they preforme the wrong action
-	*/
 }
 
 void BopIt::endGame() {
@@ -65,7 +74,12 @@ BopItAction BopIt::setRandomBopItAction() {
 	return (BopItAction)(rand() % NUM_ACTIONS);
 }
 void BopIt::updateCurrentTime() {
-	startingTime = time(0);
+	startingTime = clock();
 }
 
+
+void BopIt::insult() {
+	instultedFlag = 1;
+	insultedCounter++;
+}
 
