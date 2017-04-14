@@ -196,6 +196,30 @@ int main(int argc, char* argv[])
 	}
 	soundSystem.cleanup();
 	SDL_Quit();
+	/*
+	LanguageConverter convert = LanguageConverter();
 
+	const std::string convertEnumsToText[] = {"BOP it", "PULL it", "TWIST it", "SPIN it", "FLICK it"};
+
+	std::string value = "";
+	BopIt bopIt = BopIt();
+	std::cout << "\n ready to start the game \n";
+	std::cin >> value;
+
+	bopIt.startGame();
+
+	while (bopIt.isPlaying()) {
+		std::cout << "\n" << convert.convertText( "opish", convertEnumsToText[bopIt.getCurrentAction()])<< "\n";
+		std::string input = "";
+		std::cin >> input;
+		bopIt.performAction((BopItAction)std::stoi(input));
+	}
+
+	
+	std::cout << "\n" << bopIt.isPlaying() << "\n";
+	std::cout << "game over";
+
+	std::cin >> value;
+	//*/
 	return rc;
 }
