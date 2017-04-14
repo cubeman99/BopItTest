@@ -18,25 +18,26 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	srand((unsigned int) time(NULL));
-	//::testing::InitGoogleTest(&argc, argv);
-	//int rc = RUN_ALL_TESTS();
-	
-	//cout << "Press enter to quit...";
-	//cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	//return rc;
-	
+	//-------------------------------------------------------------------------
+	// Run the tests
 
+	::testing::InitGoogleTest(&argc, argv);
+	int rc = RUN_ALL_TESTS();
+	
+	cout << "Press enter to start playing bop it...";
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	
 
 	//-------------------------------------------------------------------------
 	// Play a game of bopit!!!!
+
+	system("cls");
 
 	// Initialize systems
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SoundSystem soundSystem;
 	soundSystem.init();
 	soundSystem.setMasterVolume(0.35f);
-
 	
 	// Load sounds
 	Sound* soundMusicIntro = Sound::loadWAV("../sounds/music_intro.wav", soundSystem.getDeviceAudioFormat());
@@ -89,7 +90,8 @@ int main(int argc, char* argv[])
 
 	bool quit = false;
 	BopIt bopit;
-
+	srand((unsigned int) time(NULL));
+	
 	while (!quit)
 	{
 		printf("Starting new game...\n\n");
@@ -194,5 +196,6 @@ int main(int argc, char* argv[])
 	}
 	soundSystem.cleanup();
 	SDL_Quit();
-	return 0;
+
+	return rc;
 }
