@@ -16,8 +16,14 @@ BopIt::BopIt() {
 
 void BopIt::startGame() {
 	playing = true;
-	currentAction = ACTION_TWIST;
+	currentAction = setRandomBopItAction();
 	updateCurrentTime();
+	
+	score = 0;
+	respondTime = 5.0f;
+	increaseSpeed = 0.9f;
+	insultedCounter = 0;
+	instultedFlag = 0;
 }
 
 BopItAction BopIt::getCurrentAction() { 
@@ -35,6 +41,7 @@ bool BopIt::performAction(BopItAction action) {
 	bool gotRightAnswer = false;
 
 	float timeElapsed = float(clock() - startingTime) / CLOCKS_PER_SEC;
+	
 
 	float insultPenalty = respondTime * float(.25 * insultedCounter);
 	if (timeElapsed > (respondTime - insultPenalty)) {
@@ -47,6 +54,7 @@ bool BopIt::performAction(BopItAction action) {
 		score += 1;
 		respondTime *= increaseSpeed;
 		updateCurrentTime();
+		currentAction = setRandomBopItAction();
 	}
 	else {
 		endGame();
@@ -71,7 +79,7 @@ void BopIt::endGame() {
 }
 
 BopItAction BopIt::setRandomBopItAction() {
-	return (BopItAction)(rand() % NUM_ACTIONS);
+	return (BopItAction)((unsigned int) rand() % NUM_ACTIONS);
 }
 void BopIt::updateCurrentTime() {
 	startingTime = clock();

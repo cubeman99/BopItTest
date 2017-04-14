@@ -74,8 +74,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../googletest/include;../googletest</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../googletest/include;../googletest;../SDL2/include</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>../SDL2/lib/x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -112,6 +116,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\googletest\src\gtest-all.cc" />
+    <ClCompile Include="..\src\audio\Sound.cpp" />
+    <ClCompile Include="..\src\audio\SoundSystem.cpp" />
     <ClCompile Include="..\src\BopIt.cpp" />
     <ClCompile Include="..\src\BopItSecretTests.cpp" />
     <ClCompile Include="..\src\BopItTests.cpp" />
@@ -122,6 +128,8 @@
     <ClCompile Include="..\src\ScoreBoardTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\audio\Sound.h" />
+    <ClInclude Include="..\src\audio\SoundSystem.h" />
     <ClInclude Include="..\src\BopIt.h" />
     <ClInclude Include="..\src\Languages.h" />
     <ClInclude Include="..\src\scoreBoard.h" />
